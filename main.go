@@ -1,94 +1,63 @@
 package main
 
 import (
-	"fmt"           // Print text | Вывод текста
-	"html/template" // HTML templates | HTML-шаблоны
-	"log"           // Log errors | Вывод ошибок
-	"net/http"      // HTTP server | HTTP-сервер
-	"strings"       // Work with text | Работа с текстом
+	"html/template"
+	"log"
+	"math"
+	"net/http"
+	"strconv"
+	"strings"
 )
 
-func main() { // Main function | Главная функция
-
+func main() {
 	http.HandleFunc("/", homePage)         // Home page | Главная страница
 	http.HandleFunc("/search", searchPage) // Search page | Страница поиска
+	http.HandleFunc("/city", cityPage)     // City page | Страница города
 
-	fmt.Println("Serveur démarré !")            // Server started | Сервер запущен
-	fmt.Println("Ouvrez http://localhost:8080") // Website address | Адрес сайта
-
-	log.Fatal(http.ListenAndServe(":8080", nil)) // Start server | Запустить сервер
+	log.Println("Serveur : http://localhost:8080")
+	log.Fatal(http.ListenAndServe(":8080", nil))
 }
 
-func homePage(w http.ResponseWriter, r *http.Request) { // Home page | Главная страница
-
-	if r.URL.Path != "/" { // Check URL | Проверить адрес
-		http.NotFound(w, r) // Return 404 | Вернуть ошибку 404
+func renderPage(w http.ResponseWriter, file string, data any) {
+	tmpl, err := template.ParseFiles("templates/" + file) // Load HTML | Загрузить HTML
+	if err != nil {
+		log.Println(err)
+		http.Error(w, "Erreur du serveur", http.StatusInternalServerError)
 		return
 	}
 
-	w.Header().Set("Content-Type", "text/html; charset=utf-8") // HTML response | HTML-ответ
+	w.Header().Set("Content-Type", "text/html; charset=utf-8")
 
-	fmt.Fprintln(w, "<h1>Weather Explorer</h1>")                                  // Page title | Заголовок страницы
-	fmt.Fprintln(w, "<form action='/search' method='GET'>")                       // Search form | Форма поиска
-	fmt.Fprintln(w, "<input name='city' placeholder='Nom de la ville' required>") // City input | Ввод города
-	fmt.Fprintln(w, "<button type='submit'>Rechercher</button>")                  // Search button | Кнопка поиска
-	fmt.Fprintln(w, "</form>")                                                    // Close form | Закрыть форму
+	if err := tmpl.Execute(w, data); err != nil {
+		log.Println(err)
+	}
 }
 
-func searchPage(w http.ResponseWriter, r *http.Request) { // Search results | Результаты поиска
-
-	cityName := strings.TrimSpace(r.URL.Query().Get("city")) // Get city name | Получить название города
-
-	if len([]rune(cityName)) < 2 { // Validate input | Проверить ввод
-		http.Error(w, "Nom de ville invalide", http.StatusBadRequest) // Return 400 | Вернуть ошибку 400
+func homePage(w http.ResponseWriter, r *http.Request) {
+	if r.URL.Path != "/" {
+		http.NotFound(w, r)
 		return
 	}
 
-	cities, err := SearchCity(cityName) // Search cities | Найти города
+	renderPage(w, "index.html", nil) // Show homepage | Показать главную
+}
 
-	if err != nil { // Check API error | Проверить ошибку API
-		log.Println(err)                                                       // Log error | Записать ошибку
-		http.Error(w, "Erreur du service de recherche", http.StatusBadGateway) // Return 502 | Вернуть ошибку 502
+func searchPage(w http.ResponseWriter, r *http.Request) {
+	cityName := strings.TrimSpace(r.URL.Query().Get("city")) // Get city | Получить город
+
+	if len([]rune(cityName)) < 2 {
+		http.Error(w, "Nom de ville invalide", http.StatusBadRequest)
 		return
 	}
 
-	w.Header().Set("Content-Type", "text/html; charset=utf-8") // HTML response | HTML-ответ
-
-	page := `
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <title>Résultats - Weather Explorer</title>
-</head>
-<body>
-    <h1>Résultats de recherche</h1>
-
-    <p>Recherche : {{.Query}}</p>
-
-    {{if .Cities}}
-        {{range .Cities}}
-            <p>
-                {{.Name}} — {{.Country}} :
-                {{.Latitude}}, {{.Longitude}}
-            </p>
-        {{end}}
-    {{else}}
-        <p>Aucune ville trouvée.</p>
-    {{end}}
-
-    <a href="/">Retour à l'accueil</a>
-</body>
-</html>`
-
-	tmpl, err := template.New("results").Parse(page) // Parse HTML template | Подготовить HTML-шаблон
-
-	if err != nil { // Check template error | Проверить ошибку шаблона
-		http.Error(w, "Erreur du serveur", http.StatusInternalServerError) // Return 500 | Вернуть ошибку 500
+	cities, err := SearchCity(cityName) // Search API | Поиск через API
+	if err != nil {
+		log.Println(err)
+		http.Error(w, "Erreur du service de recherche", http.StatusBadGateway)
 		return
 	}
 
-	data := struct { // Page data | Данные страницы
+	data := struct {
 		Query  string
 		Cities []City
 	}{
@@ -96,7 +65,35 @@ func searchPage(w http.ResponseWriter, r *http.Request) { // Search results | Р
 		Cities: cities,
 	}
 
-	if err := tmpl.Execute(w, data); err != nil { // Render results | Показать результаты
-		log.Println(err) // Log error | Записать ошибку
+	renderPage(w, "search.html", data) // Show results | Показать результаты
+}
+
+func cityPage(w http.ResponseWriter, r *http.Request) {
+	name := strings.TrimSpace(r.URL.Query().Get("name"))
+	country := strings.TrimSpace(r.URL.Query().Get("country"))
+
+	lat, errLat := strconv.ParseFloat(r.URL.Query().Get("lat"), 64)
+	lon, errLon := strconv.ParseFloat(r.URL.Query().Get("lon"), 64)
+
+	if name == "" || country == "" || errLat != nil || errLon != nil ||
+		math.IsNaN(lat) || math.IsNaN(lon) ||
+		math.IsInf(lat, 0) || math.IsInf(lon, 0) ||
+		lat < -90 || lat > 90 || lon < -180 || lon > 180 {
+		http.Error(w, "Paramètres invalides", http.StatusBadRequest)
+		return
 	}
+
+	data := struct {
+		Name      string
+		Country   string
+		Latitude  float64
+		Longitude float64
+	}{
+		Name:      name,
+		Country:   country,
+		Latitude:  lat,
+		Longitude: lon,
+	}
+
+	renderPage(w, "city.html", data) // Show city | Показать город
 }
