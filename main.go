@@ -11,10 +11,12 @@ import (
 
 func main() {
 
-	http.HandleFunc("/", homePage)           // Home page | Главная страница
-	http.HandleFunc("/search", searchPage)   // Search cities | Поиск городов
-	http.HandleFunc("/city", cityPage)       // Selected city | Выбранный город
-	http.HandleFunc("/country", countryPage) // Country regions | Регионы страны
+	http.HandleFunc("/", homePage)                                                             // Home page | Главная страница
+	http.HandleFunc("/search", searchPage)                                                     // Search cities | Поиск городов
+	http.HandleFunc("/city", cityPage)                                                         // Selected city | Выбранный город
+	http.HandleFunc("/country", countryPage)                                                   // Country regions | Регионы страны
+	http.HandleFunc("/region", regionPage)                                                     // Afficher les villes d'une région | Показать города региона
+	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("static")))) // Servir les fichiers statiques | Отдавать статические файлы
 
 	log.Println("Serveur : http://localhost:8080")
 

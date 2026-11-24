@@ -17,7 +17,15 @@
         {{range .Regions}}
 
             <section>
-                <h3>{{.Name}}</h3>
+                
+             <h3>
+                 <a href="/region?country={{$.Code}}&id={{.ID}}">
+                     {{.Name}}
+                 </a>
+             </h3>
+
+            <p>ID : {{.ID}}</p>
+
 
                 <p>Population : {{.Population}}</p>
                 <p>Localités : {{.Settlements}}</p>

@@ -1,0 +1,49 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8"> <!-- Encodage des caractères | Кодировка символов -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Adaptation mobile | Адаптация под телефон -->
+    <title>Région - Weather Explorer</title>
+</head>
+<body>
+
+    <h1>Villes et localités</h1>
+
+    <p>Pays : {{.Country}}</p> <!-- Afficher le pays | Показать страну -->
+    <p>Nombre de localités : {{.Total}}</p> <!-- Afficher le total | Показать количество -->
+
+    {{if .Cities}} <!-- Vérifier les villes disponibles | Проверить наличие городов -->
+
+        {{range .Cities}} <!-- Parcourir les villes | Перебрать города -->
+
+            <section>
+                <h3>{{.Name}}</h3> <!-- Nom de la ville | Название города -->
+
+                <p>Latitude : {{.Latitude}}</p> <!-- Latitude | Широта -->
+                <p>Longitude : {{.Longitude}}</p> <!-- Longitude | Долгота -->
+
+                <form action="/city" method="GET"> <!-- Envoyer la ville à Go | Передать город в Go -->
+                    <input type="hidden" name="name" value="{{.Name}}">
+                    <input type="hidden" name="country" value="{{$.Country}}">
+                    <input type="hidden" name="lat" value="{{.Latitude}}">
+                    <input type="hidden" name="lon" value="{{.Longitude}}">
+
+                    <button type="submit">Choisir</button> <!-- Sélectionner la ville | Выбрать город -->
+                </form>
+            </section>
+
+            <hr> <!-- Séparer les villes | Разделить города -->
+
+        {{end}} <!-- Fin de la boucle | Конец цикла -->
+
+    {{else}} <!-- Aucune ville trouvée | Города не найдены -->
+
+        <p>Aucune localité disponible.</p>
+
+    {{end}} <!-- Fin de la condition | Конец условия -->
+
+    <a href="/">Retour à la carte</a> <!-- Retour à l'accueil | Вернуться на главную -->
+
+</body>
+</html>
