@@ -4,19 +4,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Weather Explorer</title>
+    <title>Ville - Weather Explorer</title>
 </head>
 <body>
 
-    <h1>🌍 Weather Explorer</h1>
-    <p>Découvrez les villes du monde entier</p>
+    <h1>Ville sélectionnée : {{.Name}}</h1>
 
-    <h2>Rechercher une ville</h2>
+    <p>Pays : {{.Country}}</p>
 
-    <form action="/search" method="GET">
-        <input type="text" name="city" placeholder="Paris, Tokyo, Londres..." required>
-        <button type="submit">Rechercher</button>
-    </form>
+    <p>Latitude : {{.Latitude}}</p>
+
+    <p>Longitude : {{.Longitude}}</p>
+
+    <h2>Météo</h2>
+
+    <p>La météo sera disponible prochainement.</p>
+
+    <a href="/">Nouvelle recherche</a>
 
 </body>
 </html>

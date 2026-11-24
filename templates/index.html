@@ -1,38 +1,104 @@
 
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Résultats - Weather Explorer</title>
+    <meta charset="UTF-8"> <!-- Encodage des caractères | Кодировка символов -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Adaptation mobile | Адаптация под телефон -->
+
+    <title>Weather Explorer - CampusLink</title>
 </head>
+
 <body>
 
-    <h1>Résultats : {{.Query}}</h1>
+    <header> <!-- En-tête du site | Шапка сайта -->
 
-    {{if .Cities}}
-        {{range .Cities}}
-            <div>
-                <h3>{{.Name}}, {{.Country}}</h3>
-                <p>Latitude : {{.Latitude}}</p>
-                <p>Longitude : {{.Longitude}}</p>
+        <h1>🌍 Weather Explorer</h1>
 
-                <form action="/city" method="GET">
-                    <input type="hidden" name="name" value="{{.Name}}">
-                    <input type="hidden" name="country" value="{{.Country}}">
-                    <input type="hidden" name="lat" value="{{.Latitude}}">
-                    <input type="hidden" name="lon" value="{{.Longitude}}">
+        <p>Découvrez la météo partout dans le monde</p>
 
-                    <button type="submit">Choisir</button>
-                </form>
-                <hr>
-            </div>
-        {{end}}
-    {{else}}
-        <p>Aucune ville trouvée.</p>
-    {{end}}
+    </header>
 
-    <a href="/">Retour</a>
+    <main> <!-- Contenu principal | Основное содержимое -->
+
+        <section> <!-- Recherche de villes | Поиск городов -->
+
+            <h2>Rechercher une ville</h2>
+
+            <p>Entrez le nom d'une ville pour découvrir ses coordonnées et sa météo.</p>
+
+            <form action="/search" method="GET"> <!-- Envoyer la recherche à Go | Отправить запрос в Go -->
+
+                <input
+                    type="text"
+                    name="city"
+                    placeholder="Paris, Tokyo, Londres..."
+                    minlength="2"
+                    required
+                > <!-- Champ de recherche | Поле поиска -->
+
+                <button type="submit">Rechercher</button> <!-- Bouton de recherche | Кнопка поиска -->
+
+            </form>
+
+        </section>
+
+        <section> <!-- Carte du monde | Карта мира -->
+
+            <h2>Carte interactive du monde</h2>
+
+            <p>Sélectionnez un pays sur la carte pour découvrir ses régions et ses villes.</p>
+
+            <!-- Charger la carte SVG | Загрузить SVG-карту -->
+            <object
+                data="/static/world.svg"
+                type="image/svg+xml"
+                aria-label="Carte du monde"
+                style="width: 100%; max-width: 1200px; height: auto; aspect-ratio: 2000 / 1001;"
+            >
+                Votre navigateur ne peut pas afficher la carte.
+            </object>
+
+        </section>
+
+        <section> <!-- Informations du projet | Информация о проекте -->
+
+            <h2>Explorer le monde</h2>
+
+            <p>
+                Weather Explorer permet de rechercher des villes,
+                de découvrir les régions du monde et de consulter
+                des informations météorologiques.
+            </p>
+
+            <p>
+                Les données géographiques proviennent de PlaceDB
+                et les informations météorologiques sont fournies
+                par Open-Meteo.
+            </p>
+
+        </section>
+
+    </main>
+
+    <footer> <!-- Pied de page | Подвал сайта -->
+
+        <p>CampusLink Explorer - Projet Ynov 2026</p>
+
+        <p>
+            Données :
+            <a href="https://placedb.org/">PlaceDB</a> |
+            <a href="https://open-meteo.com/">Open-Meteo</a>
+        </p>
+
+        <p>
+            Carte :
+            <a href="https://github.com/melenaos/Menelabs.VectorAtlas">
+                VectorAtlas
+            </a>
+        </p>
+
+    </footer>
 
 </body>
 </html>
