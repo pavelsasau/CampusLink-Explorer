@@ -10,11 +10,14 @@ import (
 )
 
 func main() {
-	http.HandleFunc("/", homePage)         // Home page | Главная страница
-	http.HandleFunc("/search", searchPage) // Search page | Страница поиска
-	http.HandleFunc("/city", cityPage)     // City page | Страница города
+
+	http.HandleFunc("/", homePage)           // Home page | Главная страница
+	http.HandleFunc("/search", searchPage)   // Search cities | Поиск городов
+	http.HandleFunc("/city", cityPage)       // Selected city | Выбранный город
+	http.HandleFunc("/country", countryPage) // Country regions | Регионы страны
 
 	log.Println("Serveur : http://localhost:8080")
+
 	log.Fatal(http.ListenAndServe(":8080", nil))
 }
 

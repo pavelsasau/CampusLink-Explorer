@@ -1,0 +1,39 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pays - Weather Explorer</title>
+</head>
+<body>
+
+    <h1>🌍 Pays : {{.Code}}</h1>
+
+    <h2>Régions disponibles</h2>
+
+    {{if .Regions}}
+
+        {{range .Regions}}
+
+            <section>
+                <h3>{{.Name}}</h3>
+
+                <p>Population : {{.Population}}</p>
+                <p>Localités : {{.Settlements}}</p>
+            </section>
+
+            <hr>
+
+        {{end}}
+
+    {{else}}
+
+        <p>Aucune région disponible.</p>
+
+    {{end}}
+
+    <a href="/">Retour à la carte</a>
+
+</body>
+</html>

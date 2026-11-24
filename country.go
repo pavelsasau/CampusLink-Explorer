@@ -1,82 +1,42 @@
-package main
+package main // Main package | Главный пакет программы
 
-import "net/http"
+import (
+	"log"      // Display server errors | Выводить ошибки сервера
+	"net/http" // Handle HTTP requests | Обрабатывать HTTP-запросы
+	"regexp"   // Validate country codes | Проверять коды стран
+	"strings"  // Process text | Обрабатывать текст
+)
 
-// Region data | Данные региона
-type Region struct {
-	Name   string
-	Cities []string
+type CountryPage struct { // Data for country HTML page | Данные для HTML-страницы страны
+	Code    string
+	Regions []GeoRegion
 }
 
-// Country page data | Данные страницы страны
-type CountryPage struct {
-	Name    string
-	Regions []Region
-}
+func countryPage(w http.ResponseWriter, r *http.Request) { // Handle country page | Обработать страницу страны
 
-func countryPage(w http.ResponseWriter, r *http.Request) {
+	// Get country code from URL | Получить код страны из адреса
+	code := strings.ToUpper(strings.TrimSpace(r.URL.Query().Get("code")))
 
-	code := r.URL.Query().Get("code") // Country code | Код страны
+	// Accept two uppercase letters | Разрешить две заглавные буквы
+	validCode := regexp.MustCompile(`^[A-Z]{2}$`)
 
-	if code != "FR" { // Check country | Проверить страну
-		http.NotFound(w, r)
-		return
+	if !validCode.MatchString(code) { // Check country code | Проверить код страны
+		http.Error(w, "Code pays invalide", http.StatusBadRequest) // Return HTTP 400 | Вернуть ошибку 400
+		return                                                     // Stop function | Остановить функцию
 	}
 
-	france := CountryPage{
-		Name: "France",
+	regions, err := GetRegions(code) // Request regions from API | Запросить регионы из API
 
-		Regions: []Region{
-			{
-				Name: "Île-de-France",
-				Cities: []string{
-					"Paris",
-					"Versailles",
-					"Nanterre",
-				},
-			},
-			{
-				Name: "Auvergne-Rhône-Alpes",
-				Cities: []string{
-					"Lyon",
-					"Grenoble",
-					"Clermont-Ferrand",
-				},
-			},
-			{
-				Name: "Provence-Alpes-Côte d'Azur",
-				Cities: []string{
-					"Marseille",
-					"Nice",
-					"Toulon",
-				},
-			},
-			{
-				Name: "Nouvelle-Aquitaine",
-				Cities: []string{
-					"Bordeaux",
-					"Limoges",
-					"Poitiers",
-				},
-			},
-			{
-				Name: "Occitanie",
-				Cities: []string{
-					"Toulouse",
-					"Montpellier",
-					"Nîmes",
-				},
-			},
-			{
-				Name: "Bretagne",
-				Cities: []string{
-					"Rennes",
-					"Brest",
-					"Quimper",
-				},
-			},
-		},
+	if err != nil { // Check API error | Проверить ошибку API
+		log.Println(err)                                                          // Log error in terminal | Записать ошибку в терминал
+		http.Error(w, "Service géographique indisponible", http.StatusBadGateway) // Return HTTP 502 | Вернуть ошибку 502
+		return                                                                    // Stop function | Остановить функцию
 	}
 
-	renderPage(w, "country.html", france) // Display country | Показать страну
+	data := CountryPage{ // Prepare page data | Подготовить данные страницы
+		Code:    code,    // Country code | Код страны
+		Regions: regions, // Regions from API | Регионы из API
+	}
+
+	renderPage(w, "country.html", data) // Send data to HTML template | Передать данные в HTML-шаблон
 }
