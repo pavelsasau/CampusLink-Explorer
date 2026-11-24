@@ -1,3 +1,2 @@
 # CampusLink-Explorer
-ааа
-у
+аа
