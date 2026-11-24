@@ -1,4 +1,4 @@
 # CampusLink-Explorer
 ааа
 у
-ууууууууууууууу
+ууууу
