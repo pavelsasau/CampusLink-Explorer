@@ -83,17 +83,37 @@ func cityPage(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	data := struct {
-		Name      string
-		Country   string
-		Latitude  float64
-		Longitude float64
-	}{
-		Name:      name,
-		Country:   country,
-		Latitude:  lat,
-		Longitude: lon,
+	// 1. Récupérer les données météo
+	weather, err := GetWeatherData(lat, lon)
+	if err != nil {
+		log.Println("Erreur météo :", err)
+		http.Error(w, "Erreur lors de la récupération de la météo", http.StatusBadGateway)
+		return
 	}
 
-	renderPage(w, "city.html", data) // Show city | Показать город
+	// 2. Récupérer la qualité de l'air
+	airQuality, err := GetAirQualityData(lat, lon)
+	if err != nil {
+		log.Println("Erreur qualité de l'air :", err)
+		// On peut tolérer un échec partiel ou renvoyer une erreur, ici on log juste
+	}
+
+	// 3. Regrouper toutes les données pour la vue
+	data := struct {
+		Name        string
+		Country     string
+		Latitude    float64
+		Longitude   float64
+		Weather     *WeatherResponse
+		AirQuality  *AirQualityResponse
+	}{
+		Name:       name,
+		Country:    country,
+		Latitude:   lat,
+		Longitude:  lon,
+		Weather:    weather,
+		AirQuality: airQuality,
+	}
+
+	renderPage(w, "city.html", data) // Afficher la page de la ville
 }
