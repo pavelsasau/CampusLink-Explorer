@@ -1,29 +1,91 @@
 
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Weather Explorer</title>
 </head>
+
 <body>
 
-    <h1>🌍 Weather Explorer</h1>
+    <header>
+        <h1>🌍 Weather Explorer</h1>
+        <p>Découvrez les villes du monde entier</p>
+    </header>
 
-    <p>Découvrez les villes du monde entier</p>
+    <main>
 
-    <h2>Rechercher une ville</h2>
+        <section>
+            <h2>Rechercher une ville</h2>
 
-    <form action="/search" method="GET">
-        <input
-            type="text"
-            name="city"
-            placeholder="Paris, Tokyo, Londres..."
-            required
-        >
+            <form action="/search" method="GET">
+                <input
+                    type="text"
+                    name="city"
+                    placeholder="Paris, Tokyo, Londres..."
+                    required
+                >
 
-        <button type="submit">Rechercher</button>
-    </form>
+                <button type="submit">Rechercher</button>
+            </form>
+        </section>
+
+        <section>
+            <h2>Carte interactive</h2>
+
+            <p>Cliquez sur un pays pour découvrir ses villes.</p>
+
+            <svg
+                width="400"
+                height="220"
+                viewBox="0 0 400 220"
+                role="img"
+                aria-label="Carte interactive de démonstration"
+                style="max-width: 100%; height: auto;"
+            >
+
+                <rect
+                    width="400"
+                    height="220"
+                    fill="#10233d"
+                />
+
+                <a href="/search?city=Paris">
+
+                    <rect
+                        x="100"
+                        y="70"
+                        width="180"
+                        height="80"
+                        rx="12"
+                        fill="#38bdf8"
+                        stroke="white"
+                        stroke-width="2"
+                    />
+
+                    <text
+                        x="190"
+                        y="115"
+                        text-anchor="middle"
+                        fill="#10233d"
+                        font-size="20"
+                    >
+                        France
+                    </text>
+
+                </a>
+
+            </svg>
+
+        </section>
+
+    </main>
+
+    <footer>
+        <p>CampusLink Explorer - Ynov 2026</p>
+    </footer>
 
 </body>
 </html>
