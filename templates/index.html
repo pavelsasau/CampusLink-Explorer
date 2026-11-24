@@ -4,35 +4,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Résultats - Weather Explorer</title>
+    <title>Weather Explorer</title>
 </head>
 <body>
 
-    <h1>Résultats : {{.Query}}</h1>
+    <h1>🌍 Weather Explorer</h1>
 
-    {{if .Cities}}
-        {{range .Cities}}
-            <div>
-                <h3>{{.Name}}, {{.Country}}</h3>
-                <p>Latitude : {{.Latitude}}</p>
-                <p>Longitude : {{.Longitude}}</p>
+    <p>Découvrez les villes du monde entier</p>
 
-                <form action="/city" method="GET">
-                    <input type="hidden" name="name" value="{{.Name}}">
-                    <input type="hidden" name="country" value="{{.Country}}">
-                    <input type="hidden" name="lat" value="{{.Latitude}}">
-                    <input type="hidden" name="lon" value="{{.Longitude}}">
+    <h2>Rechercher une ville</h2>
 
-                    <button type="submit">Choisir</button>
-                </form>
-                <hr>
-            </div>
-        {{end}}
-    {{else}}
-        <p>Aucune ville trouvée.</p>
-    {{end}}
+    <form action="/search" method="GET">
+        <input
+            type="text"
+            name="city"
+            placeholder="Paris, Tokyo, Londres..."
+            required
+        >
 
-    <a href="/">Retour</a>
+        <button type="submit">Rechercher</button>
+    </form>
 
 </body>
 </html>
