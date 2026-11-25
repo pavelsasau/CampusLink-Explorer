@@ -1,26 +1,91 @@
 
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ville - Weather Explorer</title>
+    <meta charset="UTF-8"> <!-- Encodage des caractères | Кодировка символов -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Adaptation mobile | Адаптация под телефон -->
+
+    <title>Météo - {{.Name}}</title>
 </head>
+
 <body>
 
-    <h1>Ville sélectionnée : {{.Name}}</h1>
+    <header> <!-- En-tête du site | Шапка сайта -->
+        <h1>🌍 Weather Explorer</h1>
+        <a href="/">Accueil</a> <!-- Retour à l'accueil | Вернуться на главную -->
+    </header>
 
-    <p>Pays : {{.Country}}</p>
+    <main>
 
-    <p>Latitude : {{.Latitude}}</p>
+        <section> <!-- Informations sur la ville | Информация о городе -->
 
-    <p>Longitude : {{.Longitude}}</p>
+            <h2>📍 {{.Name}}</h2>
 
-    <h2>Météo</h2>
+            <p>Pays : {{.Country}}</p>
 
-    <p>La météo sera disponible prochainement.</p>
+            <p>Latitude : {{.Latitude}}</p>
 
-    <a href="/">Nouvelle recherche</a>
+            <p>Longitude : {{.Longitude}}</p>
+
+        </section>
+
+        <section> <!-- Météo actuelle | Текущая погода -->
+
+            <h2>🌤️ Météo actuelle</h2>
+
+            {{if .Weather}} <!-- Vérifier les données météo | Проверить данные о погоде -->
+
+                <p>🌡️ Température : {{.Weather.Current.Temperature2m}} °C</p>
+
+                <p>💧 Humidité : {{.Weather.Current.RelativeHumidity2m}} %</p>
+
+                <p>💨 Vent : {{.Weather.Current.WindSpeed10m}} km/h</p>
+
+            {{else}}
+
+                <p>Données météorologiques indisponibles.</p>
+
+            {{end}}
+
+        </section>
+
+        <section> <!-- Qualité de l'air | Качество воздуха -->
+
+            <h2>🍃 Qualité de l'air</h2>
+
+            {{if .AirQuality}} <!-- Vérifier les données | Проверить данные -->
+
+                <p>Indice européen AQI : {{.AirQuality.Current.EuropeanAqi}}</p>
+
+            {{else}}
+
+                <p>Données sur la qualité de l'air indisponibles.</p>
+
+            {{end}}
+
+        </section>
+
+        <section> <!-- Informations complémentaires | Дополнительная информация -->
+
+            <h2>À propos des données</h2>
+
+            <p>
+                Les données météorologiques et la qualité de l'air
+                proviennent des API Open-Meteo.
+            </p>
+
+        </section>
+
+    </main>
+
+    <footer> <!-- Pied de page | Подвал сайта -->
+
+        <p>CampusLink Explorer - Projet Ynov 2026</p>
+
+        <a href="/">Nouvelle recherche</a>
+
+    </footer>
 
 </body>
 </html>
