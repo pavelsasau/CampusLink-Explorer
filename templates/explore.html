@@ -1,0 +1,62 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Explorer le monde - CampusLink</title>
+</head>
+
+<body>
+
+    <!-- En-tête | Шапка -->
+    <header>
+        <h1>🌍 CampusLink Explorer</h1>
+        <p>Découvrez le monde et sa météo.</p>
+        <a href="/">← Retour à l'accueil</a>
+    </header>
+
+    <main>
+
+        <!-- Recherche | Поиск городов -->
+        <section>
+            <h2>Rechercher une ville</h2>
+
+            <form action="/search" method="GET">
+                <input
+                    type="text"
+                    name="city"
+                    placeholder="Paris, Tokyo, Londres..."
+                    minlength="2"
+                    required
+                >
+
+                <button type="submit">Rechercher</button>
+            </form>
+        </section>
+
+        <!-- Carte du monde | Карта мира -->
+        <section>
+            <h2>Carte interactive du monde</h2>
+
+            <p>Cliquez sur un pays pour explorer ses régions.</p>
+
+            <object
+                data="/map.svg"
+                type="image/svg+xml"
+                aria-label="Carte du monde"
+                style="display: block; width: 100%; max-width: 1200px; aspect-ratio: 2000 / 1001;"
+            >
+                Carte indisponible.
+            </object>
+        </section>
+
+    </main>
+
+    <footer>
+        <p>CampusLink Explorer — Projet Ynov 2026</p>
+    </footer>
+
+</body>
+</html>
