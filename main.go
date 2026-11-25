@@ -11,11 +11,13 @@ import (
 
 func main() {
 
-	http.HandleFunc("/", homePage)                                                             // Home page | Главная страница
-	http.HandleFunc("/search", searchPage)                                                     // Search cities | Поиск городов
-	http.HandleFunc("/city", cityPage)                                                         // Selected city | Выбранный город
-	http.HandleFunc("/country", countryPage)                                                   // Country regions | Регионы страны
-	http.HandleFunc("/region", regionPage)                                                     // Afficher les villes d'une région | Показать города региона
+	http.HandleFunc("/", homePage)
+	http.HandleFunc("/explore", explorePage) // Page d'exploration | Страница исследования       // Home page | Главная страница
+	http.HandleFunc("/search", searchPage)   // Search cities | Поиск городов
+	http.HandleFunc("/city", cityPage)       // Selected city | Выбранный город
+	http.HandleFunc("/country", countryPage)
+	http.HandleFunc("/region", regionPage)                                                     // Country regions | Регионы страны
+	http.HandleFunc("/map.svg", mapPage)                                                       // Carte interactive | Интерактивная карта                                                 // Afficher les villes d'une région | Показать города региона
 	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("static")))) // Servir les fichiers statiques | Отдавать статические файлы
 
 	log.Println("Serveur : http://localhost:8080")
@@ -105,12 +107,12 @@ func cityPage(w http.ResponseWriter, r *http.Request) {
 
 	// 3. Regrouper toutes les données pour la vue
 	data := struct {
-		Name        string
-		Country     string
-		Latitude    float64
-		Longitude   float64
-		Weather     *WeatherResponse
-		AirQuality  *AirQualityResponse
+		Name       string
+		Country    string
+		Latitude   float64
+		Longitude  float64
+		Weather    *WeatherResponse
+		AirQuality *AirQualityResponse
 	}{
 		Name:       name,
 		Country:    country,
@@ -121,4 +123,17 @@ func cityPage(w http.ResponseWriter, r *http.Request) {
 	}
 
 	renderPage(w, "city.html", data) // Afficher la page de la ville
+}
+
+// Afficher la page d'exploration | Показать страницу исследования
+func explorePage(w http.ResponseWriter, r *http.Request) {
+
+	// Vérifier l'adresse | Проверить адрес
+	if r.URL.Path != "/explore" {
+		http.NotFound(w, r)
+		return
+	}
+
+	// Charger la page HTML | Загрузить HTML-страницу
+	renderPage(w, "explore.html", nil)
 }

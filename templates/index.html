@@ -3,102 +3,103 @@
 <html lang="fr">
 
 <head>
-    <meta charset="UTF-8"> <!-- Encodage des caractères | Кодировка символов -->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Adaptation mobile | Адаптация под телефон -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Weather Explorer - CampusLink</title>
+    <title>CampusLink Explorer</title>
+
+    <!-- Charger le CSS | Подключить CSS -->
+    <link rel="stylesheet" href="/static/style.css">
 </head>
 
 <body>
 
-    <header> <!-- En-tête du site | Шапка сайта -->
+    <main>
 
-        <h1>🌍 Weather Explorer</h1>
+        <!-- SECTION 1 : MONTAGNES | СЕКЦИЯ 1: ГОРЫ -->
+        <section class="hero">
 
-        <p>Découvrez la météo partout dans le monde</p>
+            <div class="hero-background"></div>
 
-    </header>
+            <div class="hero-content">
+                <p class="hero-label">BIENVENUE SUR</p>
 
-    <main> <!-- Contenu principal | Основное содержимое -->
+                <h1>CAMPUSLINK<br>EXPLORER</h1>
 
-        <section> <!-- Recherche de villes | Поиск городов -->
+                <p class="hero-subtitle">
+                    Explorez le monde autrement.
+                </p>
+            </div>
 
-            <h2>Rechercher une ville</h2>
-
-            <p>Entrez le nom d'une ville pour découvrir ses coordonnées et sa météo.</p>
-
-            <form action="/search" method="GET"> <!-- Envoyer la recherche à Go | Отправить запрос в Go -->
-
-                <input
-                    type="text"
-                    name="city"
-                    placeholder="Paris, Tokyo, Londres..."
-                    minlength="2"
-                    required
-                > <!-- Champ de recherche | Поле поиска -->
-
-                <button type="submit">Rechercher</button> <!-- Bouton de recherche | Кнопка поиска -->
-
-            </form>
+            <div class="scroll-hint">
+                Défiler pour découvrir ↓
+            </div>
 
         </section>
 
-        <section> <!-- Carte du monde | Карта мира -->
 
-            <h2>Carte interactive du monde</h2>
+        <!-- SECTION 2 : INFORMATIONS | СЕКЦИЯ 2: ИНФОРМАЦИЯ -->
+        <section class="about">
 
-            <p>Sélectionnez un pays sur la carte pour découvrir ses régions et ses villes.</p>
+            <div class="about-content">
 
-            <!-- Charger la carte SVG | Загрузить SVG-карту -->
-            <object
-                data="/static/world.svg"
-                type="image/svg+xml"
-                aria-label="Carte du monde"
-                style="width: 100%; max-width: 1200px; height: auto; aspect-ratio: 2000 / 1001;"
-            >
-                Votre navigateur ne peut pas afficher la carte.
-            </object>
+                <p class="section-label">NOTRE UNIVERS</p>
+
+                <h2>À PROPOS DE NOUS</h2>
+
+                <p>
+                    CampusLink Explorer est un projet interactif
+                    qui vous permet de découvrir le monde,
+                    d'explorer ses pays et ses villes,
+                    et de consulter les conditions météorologiques.
+                </p>
+
+                <div class="features">
+
+                    <div class="feature">
+                        <h3>01 — Explorer</h3>
+                        <p>Découvrez les pays et leurs régions.</p>
+                    </div>
+
+                    <div class="feature">
+                        <h3>02 — Météo</h3>
+                        <p>Consultez les données météorologiques.</p>
+                    </div>
+
+                    <div class="feature">
+                        <h3>03 — Air</h3>
+                        <p>Découvrez la qualité de l'air.</p>
+                    </div>
+
+                </div>
+
+            </div>
 
         </section>
 
-        <section> <!-- Informations du projet | Информация о проекте -->
 
-            <h2>Explorer le monde</h2>
+        <!-- SECTION 3 : LAVE | СЕКЦИЯ 3: ЛАВА -->
+        <section class="lava-section">
 
-            <p>
-                Weather Explorer permet de rechercher des villes,
-                de découvrir les régions du monde et de consulter
-                des informations météorologiques.
-            </p>
+            <div class="lava-content">
 
-            <p>
-                Les données géographiques proviennent de PlaceDB
-                et les informations météorologiques sont fournies
-                par Open-Meteo.
-            </p>
+                <p class="section-label">L'AVENTURE COMMENCE ICI</p>
+
+                <h2>PRÊT À EXPLORER ?</h2>
+
+                <p>Le monde vous attend.</p>
+
+                <!-- Ouvrir la carte | Открыть карту -->
+                <a href="/explore" class="explore-button">
+                    COMMENCERE
+                    <span>→</span>
+                </a>
+
+            </div>
 
         </section>
 
     </main>
-
-    <footer> <!-- Pied de page | Подвал сайта -->
-
-        <p>CampusLink Explorer - Projet Ynov 2026</p>
-
-        <p>
-            Données :
-            <a href="https://placedb.org/">PlaceDB</a> |
-            <a href="https://open-meteo.com/">Open-Meteo</a>
-        </p>
-
-        <p>
-            Carte :
-            <a href="https://github.com/melenaos/Menelabs.VectorAtlas">
-                VectorAtlas
-            </a>
-        </p>
-
-    </footer>
 
 </body>
 </html>

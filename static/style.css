@@ -1,0 +1,296 @@
+
+/* STYLE GLOBAL | Общие стили */
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    margin: 0;
+    background: #000;
+    color: white;
+    font-family: Arial, sans-serif;
+}
+
+section {
+    position: relative;
+}
+
+
+/* MONTAGNES | ГОРЫ */
+
+.hero {
+    height: 100vh;
+    min-height: 600px;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.hero-background {
+    position: absolute;
+    inset: 0;
+
+    background-image: url("/static/images/mountains.png");
+    background-size: cover;
+    background-position: center top;
+    background-repeat: no-repeat;
+
+    z-index: 0;
+
+    animation: mountains-move linear both;
+    animation-timeline: scroll(root block);
+    animation-range: 0px 900px;
+}
+
+.hero-content {
+    position: relative;
+    z-index: 2;
+
+    padding: 20px;
+
+    animation: title-fly linear both;
+    animation-timeline: scroll(root block);
+    animation-range: 0px 650px;
+}
+
+.hero-label {
+    font-size: 14px;
+    letter-spacing: 6px;
+    color: #e2e8f0;
+}
+
+.hero h1 {
+    font-size: clamp(48px, 9vw, 130px);
+    line-height: 0.95;
+    letter-spacing: 4px;
+    margin: 24px 0;
+    font-weight: 800;
+}
+
+.hero-subtitle {
+    font-size: 20px;
+    letter-spacing: 2px;
+    color: #d1d5db;
+}
+
+.scroll-hint {
+    position: absolute;
+    bottom: 30px;
+    z-index: 2;
+    font-size: 13px;
+    letter-spacing: 3px;
+}
+
+
+/* ANIMATION DU TITRE | Анимация названия */
+
+@keyframes title-fly {
+    from {
+        transform: translateY(0);
+        opacity: 1;
+    }
+
+    to {
+        transform: translateY(-650px);
+        opacity: 0;
+    }
+}
+
+
+/* ANIMATION DES MONTAGNES | Анимация гор */
+
+@keyframes mountains-move {
+    from {
+        transform: translateY(0) scale(1);
+    }
+
+    to {
+        transform: translateY(-120px) scale(1.08);
+    }
+}
+
+
+/* SECTION NOIRE | Чёрная секция */
+
+.about {
+    min-height: 100vh;
+    background: #000;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 100px 24px;
+}
+
+.about-content {
+    max-width: 1000px;
+    width: 100%;
+    text-align: center;
+
+    animation: content-appear linear both;
+    animation-timeline: view();
+    animation-range: entry 0% cover 45%;
+}
+
+.section-label {
+    color: #a1a1aa;
+    font-size: 13px;
+    letter-spacing: 5px;
+}
+
+.about h2,
+.lava-content h2 {
+    font-size: clamp(36px, 6vw, 76px);
+    letter-spacing: 2px;
+}
+
+.about-content > p:not(.section-label) {
+    max-width: 700px;
+    margin: 30px auto;
+    color: #a1a1aa;
+    font-size: 19px;
+    line-height: 1.8;
+}
+
+.features {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 35px;
+    margin-top: 80px;
+}
+
+.feature {
+    text-align: left;
+    border-top: 1px solid #444;
+    padding-top: 20px;
+}
+
+.feature h3 {
+    font-size: 19px;
+}
+
+.feature p {
+    color: #a1a1aa;
+    line-height: 1.6;
+}
+
+
+/* APPARITION DU CONTENU | Появление информации */
+
+@keyframes content-appear {
+    from {
+        opacity: 0;
+        transform: translateY(90px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
+/* GROTTE DE LAVE | ЛАВОВАЯ ПЕЩЕРА */
+
+.lava-section {
+    min-height: 110vh;
+
+    background-image: url("/static/images/lava.png");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 120px 24px 80px;
+}
+
+.lava-content {
+    position: relative;
+    text-align: center;
+    z-index: 2;
+}
+
+.lava-content > p:not(.section-label) {
+    font-size: 20px;
+    color: #e5e7eb;
+}
+
+
+/* BOUTON | Кнопка */
+
+.explore-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 30px;
+
+    margin-top: 35px;
+    padding: 20px 30px;
+
+    color: white;
+    text-decoration: none;
+    letter-spacing: 2px;
+    font-size: 14px;
+
+    border: 1px solid #f97316;
+    background: rgba(0, 0, 0, 0.6);
+
+    transition: 0.3s;
+}
+
+.explore-button:hover {
+    background: #ea580c;
+    transform: translateY(-4px);
+}
+
+
+/* MOBILE | Адаптация для телефона */
+
+@media (max-width: 700px) {
+    .hero h1 {
+        letter-spacing: 1px;
+    }
+
+    .features {
+        grid-template-columns: 1fr;
+        gap: 20px;
+        margin-top: 45px;
+    }
+
+    .hero-subtitle {
+        font-size: 16px;
+    }
+
+    .about-content > p:not(.section-label) {
+        font-size: 16px;
+    }
+}
+
+
+/* ACCESSIBILITÉ | Доступность */
+
+@media (prefers-reduced-motion: reduce) {
+    html {
+        scroll-behavior: auto;
+    }
+
+    .hero-background,
+    .hero-content,
+    .about-content {
+        animation: none;
+    }
+
+    .explore-button {
+        transition: none;
+    }
+}
