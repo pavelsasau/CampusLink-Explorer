@@ -3,27 +3,43 @@
 <html lang="fr">
 
 <head>
+    <!-- Encodage des caractères | Кодировка символов -->
     <meta charset="UTF-8">
+
+    <!-- Adaptation mobile | Адаптация под телефон -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Explorer le monde - CampusLink</title>
+
+    <!-- Charger les styles CSS | Подключить CSS -->
+    <link rel="stylesheet" href="/static/map.css">
+
+    <!-- Charger JavaScript | Подключить JavaScript -->
+    <script src="/static/map.js" defer></script>
 </head>
 
 <body>
 
-    <!-- En-tête | Шапка -->
+    <!-- En-tête du site | Шапка сайта -->
     <header>
         <h1>🌍 CampusLink Explorer</h1>
+
         <p>Découvrez le monde et sa météo.</p>
+
+        <!-- Retour à l'accueil | Возвращение на главную -->
         <a href="/">← Retour à l'accueil</a>
     </header>
 
     <main>
 
-        <!-- Recherche | Поиск городов -->
+        <!-- Recherche de villes | Поиск городов -->
         <section>
+
             <h2>Rechercher une ville</h2>
 
+            <!-- Envoyer la recherche à Go | Отправить запрос в Go -->
             <form action="/search" method="GET">
+
                 <input
                     type="text"
                     name="city"
@@ -32,30 +48,72 @@
                     required
                 >
 
-                <button type="submit">Rechercher</button>
+                <button type="submit">
+                    Rechercher
+                </button>
+
             </form>
+
         </section>
 
-        <!-- Carte du monde | Карта мира -->
+        <!-- Carte interactive | Интерактивная карта -->
         <section>
+
             <h2>Carte interactive du monde</h2>
 
-            <p>Cliquez sur un pays pour explorer ses régions.</p>
+            <p>
+                Cliquez sur un pays pour explorer ses régions.
+            </p>
 
-            <object
-                data="/map.svg"
-                type="image/svg+xml"
-                aria-label="Carte du monde"
-                style="display: block; width: 100%; max-width: 1200px; aspect-ratio: 2000 / 1001;"
-            >
-                Carte indisponible.
-            </object>
+            <!-- Commandes de zoom | Кнопки масштабирования -->
+            <div class="zoom-controls">
+
+                <!-- Agrandir la carte | Увеличить карту -->
+                <button id="zoom-in" type="button">
+                    +
+                </button>
+
+                <!-- Afficher le zoom | Показать масштаб -->
+                <span id="zoom-level">100%</span>
+
+                <!-- Réduire la carte | Уменьшить карту -->
+                <button id="zoom-out" type="button">
+                    −
+                </button>
+
+                <!-- Réinitialiser le zoom | Сбросить масштаб -->
+                <button id="zoom-reset" type="button">
+                    Réinitialiser
+                </button>
+
+            </div>
+
+            <!-- Conteneur de la carte | Контейнер карты -->
+            <div class="map-viewport" id="map-viewport">
+
+                <!-- Message de chargement | Сообщение о загрузке -->
+                <p id="map-loading">
+                    Chargement de la carte...
+                </p>
+
+            </div>
+
+            <!-- Instructions | Инструкция -->
+            <p class="map-help">
+                Molette : zoomer · Glisser : déplacer · Clic : choisir un pays
+            </p>
+
         </section>
 
     </main>
 
+    <!-- Pied de page | Подвал сайта -->
     <footer>
-        <p>CampusLink Explorer — Projet Ynov 2026</p>
+
+        <p>
+            CampusLink Explorer — Projet Ynov 2026
+        </p>
+
     </footer>
 
 </body>
