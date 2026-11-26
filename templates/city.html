@@ -42,6 +42,10 @@
 
                 <p>💨 Vent : {{.Weather.Current.WindSpeed10m}} km/h</p>
 
+                <div style="margin-top: 20px;">
+                     {{.ChartSVG}}
+                </div>
+
             {{else}}
 
                 <p>Données météorologiques indisponibles.</p>

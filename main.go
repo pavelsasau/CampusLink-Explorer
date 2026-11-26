@@ -90,7 +90,7 @@ func cityPage(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// 1. Récupérer les données météo
+	// 1. Récupérer les données météo (avec les températures horaires)
 	weather, err := GetWeatherData(lat, lon)
 	if err != nil {
 		log.Println("Erreur météo :", err)
@@ -98,31 +98,35 @@ func cityPage(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// 2. Récupérer la qualité de l'air
-	airQuality, err := GetAirQualityData(lat, lon)
-	if err != nil {
-		log.Println("Erreur qualité de l'air :", err)
-		// On peut tolérer un échec partiel ou renvoyer une erreur, ici on log juste
+	// 2. Générer le graphique SVG (on ne prend que les 24 premières heures pour que ce soit lisible)
+	maxHours := 24
+	if len(weather.Hourly.Time) < maxHours {
+		maxHours = len(weather.Hourly.Time)
 	}
 
-	// 3. Regrouper toutes les données pour la vue
+	svgString := GenerateTemperatureChart(
+		weather.Hourly.Time[:maxHours],
+		weather.Hourly.Temperature2m[:maxHours],
+	)
+
+	// 3. Définir la structure "data" passée au template city.html
 	data := struct {
-		Name       string
-		Country    string
-		Latitude   float64
-		Longitude  float64
-		Weather    *WeatherResponse
-		AirQuality *AirQualityResponse
+		Name      string
+		Country   string
+		Latitude  float64
+		Longitude float64
+		Weather   *WeatherResponse
+		ChartSVG  template.HTML // Intégration du type template.HTML
 	}{
-		Name:       name,
-		Country:    country,
-		Latitude:   lat,
-		Longitude:  lon,
-		Weather:    weather,
-		AirQuality: airQuality,
+		Name:      name,
+		Country:   country,
+		Latitude:  lat,
+		Longitude: lon,
+		Weather:   weather,
+		ChartSVG:  template.HTML(svgString),
 	}
 
-	renderPage(w, "city.html", data) // Afficher la page de la ville
+	renderPage(w, "city.html", data) // Afficher la page avec toutes les données
 }
 
 // Afficher la page d'exploration | Показать страницу исследования
