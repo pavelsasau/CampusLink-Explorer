@@ -1,79 +1,241 @@
 
-/* ==========================================
-   CAMPUSLINK EXPLORER - CARTE INTERACTIVE
-   Styles de la carte | Стили карты
-   ========================================== */
+/* Styles généraux | Общие стили */
+* {
+    box-sizing: border-box;
+}
 
+html, body {
+    margin: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    font-family: Arial, sans-serif;
+}
 
-/* Fenêtre de la carte | Окно карты */
-.map-viewport {
+body {
+    background: #07111f;
+}
+
+/* Page plein écran | Полноэкранная страница */
+.explore-page {
     position: relative;
     width: 100%;
-    max-width: 1200px;
-    aspect-ratio: 2000 / 1001;
+    height: 100vh;
+    height: 100dvh; /* Hauteur réelle de l'écran | Реальная высота экрана, включая мобильные устройства */
+    overflow: hidden;
+}
+
+/* Carte du monde | Карта мира */
+.map-viewport {
+    position: absolute;
+    inset: 0; /* Top, right, bottom et left à 0 | Прижать элемент ко всем четырём краям */
+    width: 100%;
+    height: 100%;
     overflow: hidden;
     background: #0f172a;
-    border: 1px solid #334155;
-    border-radius: 12px;
-    cursor: grab;
-    touch-action: none;
+    cursor: grab; /* Curseur en forme de main | Курсор в виде руки */
+    touch-action: none; /* Désactiver les gestes du navigateur | Отключить стандартные жесты браузера на карте */
 }
 
-/* Déplacement de la carte | Перетаскивание карты */
 .map-viewport.dragging {
-    cursor: grabbing;
+    cursor: grabbing; /* Main fermée pendant le déplacement | Сжатая рука при перетаскивании */
 }
 
-/* Carte SVG | SVG-карта */
 .map-viewport svg {
     position: absolute;
     inset: 0;
     display: block;
     width: 100%;
     height: 100%;
-    transform-origin: 0 0;
-    user-select: none;
+    transform-origin: 0 0; /* Point de départ du zoom | Точка отсчёта масштабирования — левый верхний угол */
+    user-select: none; /* Empêcher la sélection | Запретить выделение карты */
 }
 
-/* Commandes de zoom | Кнопки масштабирования */
-.zoom-controls {
+#map-loading {
+    color: white;
+    text-align: center;
+    padding-top: 40vh;
+}
+
+/* En-tête | Верхняя панель */
+.map-header {
+    position: absolute;
+    top: 24px;
+    left: 24px;
+    right: 24px;
+    z-index: 10; /* Afficher au-dessus de la carte | Разместить поверх карты */
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 20px;
+    pointer-events: none; /* Laisser passer les clics vers la carte | Пропускать нажатия к карте */
+}
+
+/* Logo | Логотип */
+.project-logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 18px;
+    color: white;
+    text-decoration: none;
+    background: rgba(8, 19, 35, 0.88);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 12px;
+    backdrop-filter: blur(12px); /* Flouter ce qui est derrière | Размыть фон за стеклянной панелью */
+    -webkit-backdrop-filter: blur(12px); /* Compatibilité Safari | Поддержка Safari */
+    pointer-events: auto; /* Autoriser les clics sur le logo | Разрешить нажатия на логотип */
+}
+
+.logo-icon {
+    font-size: 27px;
+}
+
+.logo-text {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.logo-text strong {
+    font-size: 16px;
+    letter-spacing: 2px;
+}
+
+.logo-text small {
+    color: #94a3b8;
+    font-size: 10px;
+    letter-spacing: 4px;
+}
+
+/* Recherche de ville | Поиск города */
+.search-form {
     display: flex;
     align-items: center;
     gap: 10px;
-    margin: 20px 0;
+    width: 340px;
+    max-width: 100%;
+    padding: 6px 8px 6px 18px;
+    background: rgba(255, 255, 255, 0.96);
+    border-radius: 40px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+    pointer-events: auto;
 }
 
-.zoom-controls button {
-    padding: 10px 18px;
+.search-icon {
+    color: #64748b;
+    font-size: 25px;
+}
+
+.search-form input {
+    flex: 1;
+    min-width: 0; /* Permettre au champ de rétrécir | Разрешить полю сужаться */
+    padding: 9px 0;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: #0f172a;
+    font-size: 14px;
+}
+
+.search-form button {
+    width: 36px;
+    height: 36px;
+    flex-shrink: 0; /* Empêcher le bouton de rétrécir | Не позволять кнопке сжиматься */
     background: #2563eb;
     color: white;
     border: none;
-    border-radius: 8px;
+    border-radius: 50%;
+    font-size: 20px;
     cursor: pointer;
-    font-size: 16px;
 }
 
-/* Effet au survol | Эффект при наведении */
-.zoom-controls button:hover {
+.search-form button:hover {
     background: #1d4ed8;
 }
 
-/* Niveau de zoom | Текущий масштаб */
-#zoom-level {
-    font-weight: bold;
-    min-width: 55px;
-    text-align: center;
+/* Commandes de zoom | Управление масштабом */
+.zoom-controls {
+    position: absolute;
+    bottom: 68px;
+    left: 24px;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    padding: 8px;
+    background: rgba(8, 19, 35, 0.9);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 12px;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
 }
 
-/* Indications | Подсказки */
+.zoom-controls button {
+    width: 42px;
+    height: 42px;
+    border: none;
+    border-radius: 8px;
+    background: transparent;
+    color: white;
+    font-size: 24px;
+    cursor: pointer;
+}
+
+.zoom-controls button:hover {
+    background: rgba(255, 255, 255, 0.15);
+}
+
+#zoom-level {
+    padding: 8px 0;
+    color: #cbd5e1;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+/* Instructions | Подсказки */
 .map-help {
-    color: #64748b;
-    font-size: 14px;
+    position: absolute;
+    bottom: 16px;
+    left: 24px;
+    z-index: 10;
+    margin: 0;
+    padding: 10px 14px;
+    color: #cbd5e1;
+    background: rgba(8, 19, 35, 0.85);
+    border-radius: 8px;
+    font-size: 12px;
+    pointer-events: none;
 }
 
 /* Adaptation mobile | Адаптация под телефон */
 @media (max-width: 700px) {
+    .map-header {
+        top: 12px;
+        left: 12px;
+        right: 12px;
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .project-logo {
+        padding: 10px 14px;
+    }
+
+    .search-form {
+        width: 100%;
+    }
+
     .zoom-controls {
-        flex-wrap: wrap;
+        left: 12px;
+        bottom: 65px;
+    }
+
+    .map-help {
+        left: 12px;
+        right: 12px;
+        bottom: 10px;
+        font-size: 10px;
     }
 }

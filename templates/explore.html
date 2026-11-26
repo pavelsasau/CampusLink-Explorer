@@ -6,115 +6,94 @@
     <!-- Encodage des caractères | Кодировка символов -->
     <meta charset="UTF-8">
 
-    <!-- Adaptation mobile | Адаптация под телефон -->
+    <!-- Adaptation mobile | Адаптация для телефонов -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Explorer le monde - CampusLink</title>
+    <title>CampusLink Explorer — Carte du monde</title>
 
-    <!-- Charger les styles CSS | Подключить CSS -->
+    <!-- Styles de la carte | Стили карты -->
     <link rel="stylesheet" href="/static/map.css">
 
-    <!-- Charger JavaScript | Подключить JavaScript -->
+    <!-- JavaScript pour le zoom et le déplacement | Управление картой -->
     <script src="/static/map.js" defer></script>
 </head>
 
 <body>
 
-    <!-- En-tête du site | Шапка сайта -->
-    <header>
-        <h1>🌍 CampusLink Explorer</h1>
+    <!-- Page plein écran | Страница на весь экран -->
+    <main class="explore-page">
 
-        <p>Découvrez le monde et sa météo.</p>
+        <!-- Carte interactive | Интерактивная карта -->
+        <div class="map-viewport" id="map-viewport">
+            <p id="map-loading">Chargement de la carte...</p>
+        </div>
 
-        <!-- Retour à l'accueil | Возвращение на главную -->
-        <a href="/">← Retour à l'accueil</a>
-    </header>
+        <!-- En-tête flottant | Плавающая шапка -->
+        <header class="map-header">
 
-    <main>
+            <!-- Nom du projet | Название проекта -->
+            <a href="/" class="project-logo">
 
-        <!-- Recherche de villes | Поиск городов -->
-        <section>
+                <span class="logo-icon">🌍</span>
 
-            <h2>Rechercher une ville</h2>
+                <span class="logo-text">
+                    <strong>CAMPUSLINK</strong>
+                    <small>EXPLORER</small>
+                </span>
 
-            <!-- Envoyer la recherche à Go | Отправить запрос в Go -->
-            <form action="/search" method="GET">
+            </a>
+
+            <!-- Recherche de villes | Поиск городов -->
+            <form action="/search" method="GET" class="search-form">
+
+                <span class="search-icon">⌕</span>
 
                 <input
-                    type="text"
+                    type="search"
                     name="city"
-                    placeholder="Paris, Tokyo, Londres..."
+                    placeholder="Rechercher une ville..."
+                    aria-label="Rechercher une ville"
                     minlength="2"
                     required
                 >
 
-                <button type="submit">
-                    Rechercher
+                <button type="submit" aria-label="Rechercher">
+                    →
                 </button>
 
             </form>
 
-        </section>
+        </header>
 
-        <!-- Carte interactive | Интерактивная карта -->
-        <section>
+        <!-- Commandes de zoom | Управление масштабом -->
+        <div class="zoom-controls">
 
-            <h2>Carte interactive du monde</h2>
+            <!-- Agrandir la carte | Увеличить карту -->
+            <button id="zoom-in" type="button" aria-label="Zoom avant">
+                +
+            </button>
 
-            <p>
-                Cliquez sur un pays pour explorer ses régions.
-            </p>
+            <!-- Niveau de zoom | Текущий масштаб -->
+            <span id="zoom-level">100%</span>
 
-            <!-- Commandes de zoom | Кнопки масштабирования -->
-            <div class="zoom-controls">
+            <!-- Réduire la carte | Уменьшить карту -->
+            <button id="zoom-out" type="button" aria-label="Zoom arrière">
+                −
+            </button>
 
-                <!-- Agrandir la carte | Увеличить карту -->
-                <button id="zoom-in" type="button">
-                    +
-                </button>
+            <!-- Réinitialiser le zoom | Сбросить масштаб -->
+            <button id="zoom-reset" type="button" aria-label="Réinitialiser">
+                ↺
+            </button>
 
-                <!-- Afficher le zoom | Показать масштаб -->
-                <span id="zoom-level">100%</span>
+        </div>
 
-                <!-- Réduire la carte | Уменьшить карту -->
-                <button id="zoom-out" type="button">
-                    −
-                </button>
-
-                <!-- Réinitialiser le zoom | Сбросить масштаб -->
-                <button id="zoom-reset" type="button">
-                    Réinitialiser
-                </button>
-
-            </div>
-
-            <!-- Conteneur de la carte | Контейнер карты -->
-            <div class="map-viewport" id="map-viewport">
-
-                <!-- Message de chargement | Сообщение о загрузке -->
-                <p id="map-loading">
-                    Chargement de la carte...
-                </p>
-
-            </div>
-
-            <!-- Instructions | Инструкция -->
-            <p class="map-help">
-                Molette : zoomer · Glisser : déplacer · Clic : choisir un pays
-            </p>
-
-        </section>
-
-    </main>
-
-    <!-- Pied de page | Подвал сайта -->
-    <footer>
-
-        <p>
-            CampusLink Explorer — Projet Ynov 2026
+        <!-- Instructions | Подсказки -->
+        <p class="map-help">
+            Molette : zoom · Glisser : déplacer · Clic : choisir un pays
         </p>
-
-    </footer>
-
+ё
+    </main>
+    
 </body>
 </html>
