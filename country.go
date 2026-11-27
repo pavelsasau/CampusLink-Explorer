@@ -1,42 +1,46 @@
-package main // Main package | Главный пакет программы
+
+package main // Paquet principal | Главный пакет
 
 import (
-	"log"      // Display server errors | Выводить ошибки сервера
-	"net/http" // Handle HTTP requests | Обрабатывать HTTP-запросы
-	"regexp"   // Validate country codes | Проверять коды стран
-	"strings"  // Process text | Обрабатывать текст
+    "log"      // Erreurs | Ошибки
+    "net/http" // HTTP | Запросы
+    "regexp"   // Validation | Проверка
+    "sort"     // Tri | Сортировка
+    "strings"  // Texte | Текст
 )
 
-type CountryPage struct { // Data for country HTML page | Данные для HTML-страницы страны
-	Code    string
-	Regions []GeoRegion
+type CountryPage struct { // Données du pays | Данные страны
+    Code    string      // Code pays | Код страны
+    Regions []GeoRegion // Régions | Регионы
 }
 
-func countryPage(w http.ResponseWriter, r *http.Request) { // Handle country page | Обработать страницу страны
+func countryPage(w http.ResponseWriter, r *http.Request) { // Page du pays | Страница страны
 
-	// Get country code from URL | Получить код страны из адреса
-	code := strings.ToUpper(strings.TrimSpace(r.URL.Query().Get("code")))
+    code := strings.ToUpper(strings.TrimSpace(r.URL.Query().Get("code"))) // Lire le code | Получить код
 
-	// Accept two uppercase letters | Разрешить две заглавные буквы
-	validCode := regexp.MustCompile(`^[A-Z]{2}$`)
+    validCode := regexp.MustCompile(`^[A-Z]{2}$`) // Format du code | Формат кода
 
-	if !validCode.MatchString(code) { // Check country code | Проверить код страны
-		http.Error(w, "Code pays invalide", http.StatusBadRequest) // Return HTTP 400 | Вернуть ошибку 400
-		return                                                     // Stop function | Остановить функцию
-	}
+    if !validCode.MatchString(code) { // Code invalide ? | Код неверный?
+        http.Error(w, "Code pays invalide", http.StatusBadRequest) // Erreur 400 | Ошибка 400
+        return // Arrêter | Остановить
+    }
 
-	regions, err := GetRegions(code) // Request regions from API | Запросить регионы из API
+    regions, err := GetRegions(code) // Charger les régions | Загрузить регионы
 
-	if err != nil { // Check API error | Проверить ошибку API
-		log.Println(err)                                                          // Log error in terminal | Записать ошибку в терминал
-		http.Error(w, "Service géographique indisponible", http.StatusBadGateway) // Return HTTP 502 | Вернуть ошибку 502
-		return                                                                    // Stop function | Остановить функцию
-	}
+    if err != nil { // Erreur API ? | Ошибка API?
+        log.Println(err) // Journal | Запись ошибки
+        http.Error(w, "Service géographique indisponible", http.StatusBadGateway) // Erreur 502 | Ошибка 502
+        return // Arrêter | Остановить
+    }
 
-	data := CountryPage{ // Prepare page data | Подготовить данные страницы
-		Code:    code,    // Country code | Код страны
-		Regions: regions, // Regions from API | Регионы из API
-	}
+    sort.Slice(regions, func(i, j int) bool { // Trier par population | Сортировать по населению
+        return regions[i].Population > regions[j].Population // Plus grand d'abord | Сначала большее
+    })
 
-	renderPage(w, "country.html", data) // Send data to HTML template | Передать данные в HTML-шаблон
+    data := CountryPage{ // Préparer les données | Подготовить данные
+        Code:    code,    // Code pays | Код страны
+        Regions: regions, // Régions triées | Отсортированные регионы
+    }
+
+    renderPage(w, "country.html", data) // Afficher HTML | Показать страницу
 }
